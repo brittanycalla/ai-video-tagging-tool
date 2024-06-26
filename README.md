@@ -1,70 +1,42 @@
-# Getting Started with Create React App
+# AI-Powered Video Tagging Tool
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web application that uses Azure AI services to automatically generate metadata keywords from video transcripts, providing an easy and efficient way to add metadata to your video content.
 
-## Available Scripts
+<img src="https://drive.google.com/uc?export=view&id=1l0ZuC9C9ppsw-ztQn_RQ2HvQZcUoBOqI" alt="A screen recording demo of the video tagging tool.">
 
-In the project directory, you can run:
+## How It's Made
 
-### `npm start`
+### Tech Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Frontend**: React, Tailwind CSS
+- **Backend**: Express.js, Node.js
+- **AI Services**: Azure Speech-to-Text, Azure Language Studio (Named Entity Recognition)
+- **Other**: Axios for HTTP requests, WebSockets for real-time updates, file-saver for downloading CSV files
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### How It Works
 
-### `npm test`
+1. **Upload**: Drag and drop a video file or select it manually.
+2. **Processing**: The backend uses Azure Speech-to-Text to transcribe the video and Azure Language Studio to generate keywords from the transcript.
+3. **Display**: The transcript is displayed with keywords highlighted.
+4. **Download**: Users can download the keywords as a CSV file.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Optimizations
 
-### `npm run build`
+- **Loading Indicators**: Added a loading spinner and progress bar to enhance user experience during the upload and processing phases.
+- **Error Handling**: Implemented user-friendly error messages for large files and invalid file types.
+- **WebSocket**: Utilized WebSockets for real-time processing updates, providing a smoother user experience.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Lessons Learned
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- **Azure Integration**: Gained deeper understanding and experience in integrating Azure AI services, specifically Speech-to-Text and Language Studio.
+- **Real-Time Updates**: Learned the importance of providing real-time feedback to users and effectively implemented this using WebSockets.
+- **User Experience**: Realized the value of clear, user-friendly interfaces and error messages to enhance usability.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Roadmap
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- **Enhanced Tagging**: Improve the accuracy and relevance of keywords by fine-tuning the AI models or integrating additional data sources.
+- **Metadata Schema and Tag Taxonomy Integration**: Integrate with existing metadata schemas and tag taxonomies to enhance consistency and interoperability.
+- **Multi-Language Support**: Extend the tool to support multiple languages for transcription and keywording.
+- **User Accounts**: Implement user accounts and storage to allow users to save and manage their video keywords and transcripts.
+- **Video Preview**: Add a feature to preview the video within the application.
+- **Advanced Analytics**: Provide detailed analytics and insights based on the keywords and transcripts.
