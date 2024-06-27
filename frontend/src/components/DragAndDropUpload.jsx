@@ -161,29 +161,29 @@ const DragAndDropUpload = () => {
     return parts;
   };
 
-  const formatTagsForCSV = (tags, fileName) => {
-    const tagMap = tags.reduce((acc, tag) => {
-      if (!acc[tag.category]) {
-        acc[tag.category] = [];
-      }
-      acc[tag.category].push(tag.text);
-      return acc;
-    }, {});
+  const formatTagsForCSV = (files) => {
+    if (files.length === 0) return '';
 
-    const categories = Object.keys(tagMap);
-    const csvRows = ['Filename,' + categories.join(',')];
-    const row = [fileName];
+    const categories = [...new Set(files.flatMap(file => file.tags.map(tag => tag.category)))];
+    const header = ['Filename', ...categories].join(',');
 
-    categories.forEach(category => {
-      row.push(`"${tagMap[category].join('|')}"`);
+    const rows = files.map(file => {
+      const row = [file.name];
+      categories.forEach(category => {
+        const tagsInCategory = file.tags
+          .filter(tag => tag.category === category)
+          .map(tag => tag.text)
+          .join('|');
+        row.push(tagsInCategory);
+      });
+      return row.join(',');
     });
 
-    csvRows.push(row.join(','));
-    return csvRows.join('\n');
+    return [header, ...rows].join('\n');
   };
 
   const downloadCSV = () => {
-    const csvData = formatTagsForCSV(tags, fileInfo.name);
+    const csvData = formatTagsForCSV(uploadedFiles);
     const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
     saveAs(blob, 'tags.csv');
   };
@@ -240,18 +240,15 @@ const DragAndDropUpload = () => {
       <div className='flex flex-col w-full'>
         <div className='w-full h-px bg-gray-300'></div>
         <div className='flex flex-col mb-6 md:flex-row md:justify-between'>
-          <div className='flex flex-col'>
-            <h3 className='mt-6 mb-1 font-semibold'>Keywords:</h3>
-            <ul className='flex flex-wrap mb-6'>
-              {tags.map((tag, index) => (
-                <div key={index} className='flex flex-col px-3 py-1 mt-2 mr-2 rounded-md bg-indigo-50'>
-                  <span className='text-xs font-normal text-indigo-600 uppercase'>{tag.category}</span>
-                  <li className='inline-block font-semibold'>{tag.text}</li>
-                </div>
-              ))}
-            </ul>
-          </div>
-          <button onClick={downloadCSV} disabled={!fileInfo} className='px-4 py-2 text-white bg-indigo-600 rounded-md w-fit md:self-center'>Download CSV</button>
+          <h3 className='mt-6 mb-1 font-semibold'>Keywords:</h3>
+          <ul className='flex flex-wrap mb-6'>
+            {tags.map((tag, index) => (
+              <div key={index} className='flex flex-col px-3 py-1 mt-2 mr-2 rounded-md bg-indigo-50'>
+                <span className='text-xs font-normal text-indigo-600 uppercase'>{tag.category}</span>
+                <li className='inline-block font-semibold'>{tag.text}</li>
+              </div>
+            ))}
+          </ul>
         </div>
         <div className='w-full h-px bg-gray-300'></div>
         <h3 className='mt-6 mb-1 font-semibold'>Transcript:</h3>
@@ -259,6 +256,13 @@ const DragAndDropUpload = () => {
       </div>
       <div className='flex flex-col w-full'>
         <h3 className='mb-2 font-semibold'>Uploaded Videos:</h3>
+        <button 
+          onClick={downloadCSV} 
+          disabled={!uploadedFiles} 
+          className='px-4 py-2 mb-2 text-sm font-semibold text-white bg-indigo-600 rounded-md'
+          >
+            Download CSV
+          </button>
         <ul>
           {paginatedFiles.map((file, index) => (
             <SavedFileInfo key={index} fileInfo={file} fileIndex={index} onDelete={deleteFile} />
