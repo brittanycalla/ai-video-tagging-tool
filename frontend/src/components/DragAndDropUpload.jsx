@@ -3,10 +3,13 @@ import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import LoadingSpinner from './LoadingSpinner';
-import FileInfo from './FileInfo';
+import FileProcessingInfo from './FileProcessingInfo';
 import uploadIcon from '../uploadIcon.svg';
+import SavedFileInfo from './SavedFileInfo';
 const apiUrl = process.env.REACT_APP_API_URL;
 const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
+const ITEMS_PER_LOAD = 2;
+
 
 const DragAndDropUpload = () => {
   const [tags, setTags] = useState([]);
@@ -16,6 +19,12 @@ const DragAndDropUpload = () => {
   const [fileInfo, setFileInfo] = useState(null);
   const [ws, setWs] = useState(null);
   const [error, setError] = useState(null);
+  const [uploadedFiles, setUploadedFiles] = useState(() => {
+    const savedFiles = localStorage.getItem('uploadedFiles');
+    return savedFiles ? JSON.parse(savedFiles) : [];
+  });
+  const [itemsToShow, setItemsToShow] = useState(ITEMS_PER_LOAD);
+
 
   useEffect(() => {
     return () => {
@@ -85,6 +94,16 @@ const DragAndDropUpload = () => {
           setTranscript(data.transcript);
           setTags(data.tags);
           setIsUploading(false);
+
+          const newFile = {
+            name: file.name,
+            tags: data.tags,
+            transcript: data.transcript,
+          };
+          
+          const updatedFiles = [newFile, ...uploadedFiles];
+          setUploadedFiles(updatedFiles);
+          localStorage.setItem('uploadedFiles', JSON.stringify(updatedFiles));
         }
         if (data.error) {
           console.error(data.error);
@@ -100,7 +119,7 @@ const DragAndDropUpload = () => {
       console.error('Error uploading the file:', error);
       setIsUploading(false);
     })
-  }, [ws]);
+  }, [ws, uploadedFiles]);
 
   const { getRootProps, getInputProps, isDragActive, open } = useDropzone({ 
     onDrop,
@@ -169,10 +188,31 @@ const DragAndDropUpload = () => {
     saveAs(blob, 'tags.csv');
   };
 
+  const deleteFile = (index) => {
+  const updatedFiles = uploadedFiles.filter((_, i) => i !== index);
+  setUploadedFiles(updatedFiles);
+  localStorage.setItem('uploadedFiles', JSON.stringify(updatedFiles));
+  if (updatedFiles.length < itemsToShow) {
+    setItemsToShow(updatedFiles.length);
+  }
+  };
+
+  const deleteAllFiles = () => {
+    setUploadedFiles([]);
+    localStorage.removeItem('uploadedFiles');
+    setItemsToShow(ITEMS_PER_LOAD);
+  };
+
+  const loadMore = () => {
+    setItemsToShow(itemsToShow + ITEMS_PER_LOAD);
+  };
+
+  const paginatedFiles = uploadedFiles.slice(0, itemsToShow);
+
   return (
-    <div className='flex flex-col items-center max-w-screen-md px-10 py-6 mx-auto md:border-gray-200 md:border md:border-solid md:rounded-md'>
-      <h2 className='self-start mb-1 text-xl font-bold'>Upload your Video</h2>
-      <p className='self-start mb-6 text-sm font-semibold text-gray-600'>Upload a video to generate metadata keywords based on its transcript.</p>
+    <div className='flex flex-col items-center max-w-screen-md px-4 py-6 mx-auto md:border-gray-300 md:border md:border-solid md:rounded-md'>
+      <h2 className='self-start mb-1 font-semibold'>Upload Your Video</h2>
+      <p className='self-start mb-2 text-sm text-gray-600'>Upload a video to generate metadata keywords based on its transcript.</p>
       {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
       <div 
         className={`flex flex-col items-center justify-center bg-gray-50 border-gray-400 border-2 rounded-md p-10 mb-6 w-full min-h-60 transition-colors duration-300 ${isDragActive ? 'bg-indigo-100/50 border-indigo-400 border-solid' : 'border-gray-400 border-dashed'} ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`} 
@@ -187,7 +227,7 @@ const DragAndDropUpload = () => {
               <div className='w-12 p-2 mb-4 bg-indigo-500 rounded-md'>
                 <img src={uploadIcon} alt="A white upload icon - a white arrow pointing up" />
               </div>
-              <p className={`font-bold text-lg text-center`}>
+              <p className={`font-bold text-center`}>
                 {`${isDragActive ? 'Drop to upload your file' : 'Drag a video file here to upload it'}`}
               </p>
               <p className='text-gray-600'>Maximum file size 50MB</p>
@@ -196,12 +236,12 @@ const DragAndDropUpload = () => {
           )
         }
       </div>
-      {fileInfo && <FileInfo fileInfo={fileInfo} uploadProgress={uploadProgress} />}
+      {fileInfo && <FileProcessingInfo fileInfo={fileInfo} uploadProgress={uploadProgress} />}
       <div className='flex flex-col w-full'>
-        <div className='w-full h-px bg-gray-200'></div>
+        <div className='w-full h-px bg-gray-300'></div>
         <div className='flex flex-col mb-6 md:flex-row md:justify-between'>
           <div className='flex flex-col'>
-            <h3 className='mt-6 mb-1 text-sm font-bold uppercase'>Keywords:</h3>
+            <h3 className='mt-6 mb-1 font-semibold'>Keywords:</h3>
             <ul className='flex flex-wrap mb-6'>
               {tags.map((tag, index) => (
                 <div key={index} className='flex flex-col px-3 py-1 mt-2 mr-2 rounded-md bg-indigo-50'>
@@ -213,9 +253,33 @@ const DragAndDropUpload = () => {
           </div>
           <button onClick={downloadCSV} disabled={!fileInfo} className='px-4 py-2 text-white bg-indigo-600 rounded-md w-fit md:self-center'>Download CSV</button>
         </div>
-        <div className='w-full h-px bg-gray-200'></div>
-        <h3 className='mt-6 mb-1 text-sm font-bold uppercase'>Transcript:</h3>
+        <div className='w-full h-px bg-gray-300'></div>
+        <h3 className='mt-6 mb-1 font-semibold'>Transcript:</h3>
         <div className='mb-6 text-sm/7'>{getHighlightedText(transcript, tags)}</div>
+      </div>
+      <div className='flex flex-col w-full'>
+        <h3 className='mb-2 font-semibold'>Uploaded Videos:</h3>
+        <ul>
+          {paginatedFiles.map((file, index) => (
+            <SavedFileInfo key={index} fileInfo={file} fileIndex={index} onDelete={deleteFile} />
+          ))}
+        </ul>
+        {itemsToShow < uploadedFiles.length && (
+          <button 
+            onClick={loadMore} 
+            className='px-4 py-2 mt-2 font-semibold text-indigo-500 border border-gray-300 border-solid rounded-md'
+          >
+            Load More
+          </button>
+        )}
+        {uploadedFiles.length > 0 && (
+          <button 
+            onClick={deleteAllFiles} 
+            className='mt-4 text-sm text-red-500'
+          >
+            Delete All Videos
+          </button>
+      )}
       </div>
     </div>
   );
