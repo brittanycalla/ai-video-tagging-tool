@@ -246,7 +246,7 @@ const DragAndDropUpload = () => {
   const paginatedFiles = uploadedFiles.slice(0, itemsToShow);
 
   return (
-    <div className='flex flex-col h-screen px-4 md:px-6 md:flex-row'>
+    <div className='flex flex-col min-h-full px-4 md:px-6 md:flex-row'>
       <div className='flex flex-col items-center py-6 md:w-1/2 md:mx-auto'>
         <h2 className="self-start mb-1 font-semibold">Upload Your Video</h2>
         <p className="self-start mb-2 text-sm text-gray-600">
