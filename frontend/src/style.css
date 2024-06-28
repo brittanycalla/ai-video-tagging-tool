@@ -545,6 +545,15 @@ video {
   --tw-contain-style:  ;
 }
 
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+}
+
+.top-0 {
+  top: 0px;
+}
+
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -973,6 +982,15 @@ code {
 }
 
 @media (min-width: 768px) {
+  .md\:sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+
+  .md\:top-0 {
+    top: 0px;
+  }
+
   .md\:order-first {
     order: -9999;
   }
@@ -984,6 +1002,10 @@ code {
 
   .md\:hidden {
     display: none;
+  }
+
+  .md\:h-screen {
+    height: 100vh;
   }
 
   .md\:w-1\/2 {
@@ -1000,6 +1022,10 @@ code {
 
   .md\:justify-between {
     justify-content: space-between;
+  }
+
+  .md\:overflow-y-auto {
+    overflow-y: auto;
   }
 
   .md\:border-r {

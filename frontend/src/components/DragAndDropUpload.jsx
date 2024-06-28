@@ -246,7 +246,7 @@ const DragAndDropUpload = () => {
   const paginatedFiles = uploadedFiles.slice(0, itemsToShow);
 
   return (
-    <div className='flex flex-col min-h-full px-4 md:px-6 md:flex-row'>
+    <div className='top-0 flex flex-col min-h-full px-4 md:px-6 md:flex-row'>
       <div className='flex flex-col items-center py-6 md:w-1/2 md:mx-auto'>
         <h2 className="self-start mb-1 font-semibold">Upload Your Video</h2>
         <p className="self-start mb-2 text-sm text-gray-600">
@@ -334,7 +334,7 @@ const DragAndDropUpload = () => {
         </div>
         <div className='w-full h-px bg-gray-300 md:hidden'></div>
       </div>
-      <aside className='flex flex-col py-6 md:border-r md:border-gray-300 md:border-solid md:w-72 md:pr-6 md:order-first'>
+      <aside className='flex flex-col py-6 md:sticky md:top-0 md:h-screen md:overflow-y-auto md:border-r md:border-gray-300 md:border-solid md:w-72 md:pr-6 md:order-first'>
         <div className='flex items-start justify-between'>
           <h3 className='mb-2 font-semibold'>Uploaded Videos</h3>
           <button
