@@ -9,8 +9,9 @@ const SavedFileInfo = ({ fileInfo, fileIndex, onDelete }) => {
         <li key={fileIndex} className='text-sm font-bold tracking-wide md:text-xs'>{fileInfo.name}</li>
         <button
           onClick={() => onDelete(fileIndex)}
+          aria-label={`Delete ${fileInfo.name}`}
         >
-        <DeleteIcon />
+          <DeleteIcon />
         </button>
       </div>
       <ul className='flex flex-wrap'>

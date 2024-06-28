@@ -6,6 +6,7 @@ import LoadingSpinner from "./LoadingSpinner";
 import FileProcessingInfo from "./FileProcessingInfo";
 import uploadIcon from "../uploadIcon.svg";
 import SavedFileInfo from "./SavedFileInfo";
+import DeleteIcon from "./DeleteIcon";
 const apiUrl = process.env.REACT_APP_API_URL;
 const websocketUrl = process.env.REACT_APP_WEBSOCKET_URL;
 const ITEMS_PER_LOAD = 2;
@@ -223,6 +224,21 @@ const DragAndDropUpload = () => {
     setItemsToShow(ITEMS_PER_LOAD);
   };
 
+  const deleteTag = (tagIndex) => {
+    const updatedTags = tags.filter((_, index) => index !== tagIndex);
+    setTags(updatedTags);
+
+    // Update the corresponding uploaded file's tags
+    const updatedFiles = uploadedFiles.map(file => {
+      if (file.name === fileInfo.name) {
+        return { ...file, tags: updatedTags };
+      }
+      return file;
+    });
+    setUploadedFiles(updatedFiles);
+    localStorage.setItem('uploadedFiles', JSON.stringify(updatedFiles));
+  };
+
   const loadMore = () => {
     setItemsToShow(itemsToShow + ITEMS_PER_LOAD);
   };
@@ -266,6 +282,8 @@ const DragAndDropUpload = () => {
               <p className="text-gray-600">Maximum file size 50MB</p>
               <button
                 type="button"
+                tabIndex="0" 
+                aria-label="Choose your video file to upload"
                 className={`font-semibold text-indigo-600 hover:cursor-pointer transition-transform transform ${
                   isDragActive ? "scale-0" : "scale-100"
                 }`}
@@ -284,17 +302,25 @@ const DragAndDropUpload = () => {
         )}
         <div className="flex flex-col w-full">
           <div className="w-full h-px bg-gray-300"></div>
-          <div className="flex flex-col mb-6 md:flex-row md:justify-between">
+          <div className="flex flex-col mb-6 md:justify-between">
             <h3 className="mt-6 mb-1 font-semibold">Keywords</h3>
-            <ul className="flex flex-wrap mb-6">
+            <ul className="flex flex-wrap">
               {tags.map((tag, index) => (
                 <div
                   key={index}
-                  className='flex flex-col px-3 py-1 mt-2 mr-2 rounded-md bg-indigo-50'
+                  className='flex flex-col px-2 py-1 mt-2 mr-2 rounded-md bg-indigo-50'
                 >
-                  <span className='text-xs font-normal text-indigo-600 uppercase'>
-                    {tag.category}
-                  </span>
+                  <div className='flex justify-between'>
+                    <span className='text-xs font-normal text-indigo-600 uppercase'>
+                      {tag.category}
+                    </span>
+                    <button
+                      onClick={() => deleteTag(index)}
+                      className='ml-2'
+                    >
+                      <DeleteIcon />
+                    </button>
+                  </div>
                   <li className='inline-block font-semibold'>{tag.text}</li>
                 </div>
               ))}
