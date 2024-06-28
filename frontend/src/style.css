@@ -545,15 +545,6 @@ video {
   --tw-contain-style:  ;
 }
 
-.sticky {
-  position: -webkit-sticky;
-  position: sticky;
-}
-
-.top-0 {
-  top: 0px;
-}
-
 .mb-1 {
   margin-bottom: 0.25rem;
 }

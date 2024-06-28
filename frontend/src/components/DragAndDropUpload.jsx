@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { saveAs } from "file-saver";
+import { v4 as uuidv4 } from 'uuid';
 import LoadingSpinner from "./LoadingSpinner";
 import FileProcessingInfo from "./FileProcessingInfo";
 import uploadIcon from "../uploadIcon.svg";
@@ -98,13 +99,14 @@ const DragAndDropUpload = () => {
               setUploadProgress(data.progress);
             }
             if (data.transcript && data.tags) {
+              const tagsWithIds = data.tags.map(tag => ({ ...tag, id: uuidv4() }));
+              setTags(tagsWithIds);
               setTranscript(data.transcript);
-              setTags(data.tags);
               setIsUploading(false);
 
               const newFile = {
                 name: file.name,
-                tags: data.tags,
+                tags: tagsWithIds,
                 transcript: data.transcript,
               };
 
@@ -224,8 +226,8 @@ const DragAndDropUpload = () => {
     setItemsToShow(ITEMS_PER_LOAD);
   };
 
-  const deleteTag = (tagIndex) => {
-    const updatedTags = tags.filter((_, index) => index !== tagIndex);
+  const deleteTag = (tagId) => {
+    const updatedTags = tags.filter(tag => tag.id !== tagId);
     setTags(updatedTags);
 
     // Update the corresponding uploaded file's tags
@@ -307,7 +309,7 @@ const DragAndDropUpload = () => {
             <ul className="flex flex-wrap">
               {tags.map((tag, index) => (
                 <div
-                  key={index}
+                  key={tag.id}
                   className='flex flex-col px-2 py-1 mt-2 mr-2 rounded-md bg-indigo-50'
                 >
                   <div className='flex justify-between'>
@@ -315,7 +317,7 @@ const DragAndDropUpload = () => {
                       {tag.category}
                     </span>
                     <button
-                      onClick={() => deleteTag(index)}
+                      onClick={() => deleteTag(tag.id)}
                       className='ml-2'
                     >
                       <DeleteIcon />
