@@ -1,6 +1,6 @@
 # AI-Powered Video Tagging Tool
 
-A web application that uses Azure AI services to automatically generate metadata keywords from video transcripts, providing an easy and efficient way to add metadata to your video content.
+A web application that uses Azure AI services to automatically generate metadata tags from video transcripts, providing an easy and efficient way to add metadata to your video content.
 
 <img src="https://drive.google.com/uc?export=view&id=1l0ZuC9C9ppsw-ztQn_RQ2HvQZcUoBOqI" alt="A screen recording demo of the video tagging tool.">
 
@@ -16,9 +16,9 @@ A web application that uses Azure AI services to automatically generate metadata
 ### How It Works
 
 1. **Upload**: Drag and drop a video file or select it manually.
-2. **Processing**: The backend uses Azure Speech-to-Text to transcribe the video and Azure Language Studio to generate keywords from the transcript.
-3. **Display**: The transcript is displayed with keywords highlighted.
-4. **Download**: Users can download the keywords as a CSV file.
+2. **Processing**: The backend uses Azure Speech-to-Text to transcribe the video and Azure Language Studio to generate tags from the transcript.
+3. **Display**: The transcript is displayed with tags highlighted.
+4. **Download**: Users can download the tags as a CSV file.
 
 ## Optimizations
 
@@ -34,9 +34,9 @@ A web application that uses Azure AI services to automatically generate metadata
 
 ## Roadmap
 
-- **Enhanced Tagging**: Improve the accuracy and relevance of keywords by fine-tuning the AI models or integrating additional data sources.
+- **Enhanced Tagging**: Improve the accuracy and relevance of tags by fine-tuning the AI models or integrating additional data sources.
 - **Metadata Schema and Tag Taxonomy Integration**: Integrate with existing metadata schemas and tag taxonomies to enhance consistency and interoperability.
-- **Multi-Language Support**: Extend the tool to support multiple languages for transcription and keywording.
-- **User Accounts**: Implement user accounts and storage to allow users to save and manage their video keywords and transcripts.
+- **Multi-Language Support**: Extend the tool to support multiple languages for transcription and tagging.
+- **User Accounts**: Implement user accounts and storage to allow users to save and manage their video tags and transcripts.
 - **Video Preview**: Add a feature to preview the video within the application.
-- **Advanced Analytics**: Provide detailed analytics and insights based on the keywords and transcripts.
+- **Advanced Analytics**: Provide detailed analytics and insights based on the tags and transcripts.

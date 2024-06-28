@@ -246,11 +246,11 @@ const DragAndDropUpload = () => {
   const paginatedFiles = uploadedFiles.slice(0, itemsToShow);
 
   return (
-    <div className='top-0 flex flex-col min-h-full px-4 md:px-6 md:flex-row'>
+    <div className='flex flex-col min-h-full px-4 md:px-6 md:flex-row'>
       <div className='flex flex-col items-center py-6 md:w-1/2 md:mx-auto'>
         <h2 className="self-start mb-1 font-semibold">Upload Your Video</h2>
         <p className="self-start mb-2 text-sm text-gray-600">
-          Upload a video to generate metadata keywords based on its transcript.
+          Upload a video to generate metadata tags based on its transcript.
         </p>
         {error && <p className="mb-2 text-sm text-red-500">{error}</p>}
         <div
@@ -303,7 +303,7 @@ const DragAndDropUpload = () => {
         <div className="flex flex-col w-full">
           <div className="w-full h-px bg-gray-300"></div>
           <div className="flex flex-col mb-6 md:justify-between">
-            <h3 className="mt-6 mb-1 font-semibold">Keywords</h3>
+            <h3 className="mt-6 mb-1 font-semibold">Tags</h3>
             <ul className="flex flex-wrap">
               {tags.map((tag, index) => (
                 <div
